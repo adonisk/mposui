@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Ezetap Software Team
+    </title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css"/>
+  </head>
+  <body>
+    <div class="container" style="padding-top: 10px;">
+
+      <h3 class="text-center">Where Art Thou?</h3>
+
+      <form role="form" id="data_collection" style="padding-top: 10px;">
+
+
+       <div class="form-group">
+         <input class="form-control" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount, but you can use it as km marker!"  required> </div>
+
+       <div class="form-group">
+         <button  class="btn btn-warning btn-block" id="payCash" onclick="payByCash();return false;"><span class="glyphicon glyphicon-map-marker pull-left" style="padding-right:5px; border-right: 1px solid gray; "></span> Mark Me!</button>
+       </div>
+
+       </form>
+   </div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+     if (typeof Ezetap != "undefined") { // check the bridge 
+        if (Ezetap.getMessage != "undefined") { // check the method
+          Ezetap.getMessage(msg, valid);
+        }
+     }
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 0) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  } else {
+    $('#ezetap_amount').val(json.ezetap_amount+1);
+  }
+  return json;
+}
+
+function payByCash() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, dont call ezetap
+    try {
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function getWebSetting(setting) {
+  //alert(setting);
+}
+
+$(document).ready(function() {
+  if (typeof Ezetap == "undefined") { // check the bridge; enable payment only if it is inside Ezetap mPOS
+    $("#payCash").attr('disabled','disabled');
+  }
+
+usernm="5300000006";
+pwd="1ez1ez";
+durl = "http://d.eze.cc/api/2.0/txn/list";
+curl = "http://d.eze.cc/api/1.0/payment/cash";
+
+$.ajax({
+  contentType: 'application/json',
+  type: 'POST',
+  url: durl,
+  data: JSON.stringify({
+    "username":usernm,
+    "password":pwd,
+    "startDate":"2014-01-01",
+    "endDate":"2014-11-29"
+    }) ,
+  success: function(data){
+    $.each(data.txns, function(i, t) {
+      console.log(t.amount);
+    });
+  }
+
+  });
+
+});
+
+</script>
+</html>
+<!--
+vim: set ts=2 sw=2 et ai sm :
+--> 

@@ -1,0 +1,12 @@
+[
+	{
+		"category_id": 1,
+		"value": "TSHIRT",
+		"title": "T-Shirt"
+	},
+	{
+		"category_id": 2,
+		"value": "SHIRT",
+		"title": "Shirts"
+	}
+]

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="css/themes/my-custom-theme.css" />
+    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" media="screen,projection"/>
+    <style>
+      .ui-controlgroup-controls {
+        width:100%;
+      }
+      .ui-radio {
+        width:100%;
+      }
+      .container {
+        width:80%;
+        margin: auto;
+      }
+      label.error {
+        color:red;
+      }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  </head>
+
+  <body>
+    <!-- button color #479753 -->
+    <div data-role="page" data-theme="a">
+    <div data-role="header" style="overflow:hidden;">
+      <h3><img src="http://www.htmedia.in/images/ht_logo.gif" alt="HT Media"/></h3>
+    </div>
+    <div role="main" class="ui-content" data-theme="b">
+     <form action="#" id="data_collection">
+     <div class="row">
+       <fieldset data-role="controlgroup" data-type="horizontal">
+       <div class="ui-grid-a">
+         <div class="ui-block-a">
+           <input type="radio" name="publication" id="publication_ht" value="HT" checked="checked">
+           <label for="publication_ht">Hindustan Times</label>
+         </div>
+         <div class="ui-block-b">
+           <input type="radio" name="publication" id="publication_mint" value="MINT">
+           <label for="publication_mint">Mint</label>
+         </div>
+       </div>
+       </fieldset>
+     </div>
+
+     <div class="row">
+       <fieldset data-role="controlgroup" data-type="horizontal">
+       <div class="ui-grid-a">
+         <div class="ui-block-a">
+           <input type="radio" name="duration" id="duration_1" value="1" checked>
+           <label for="duration_1">1 year</label>
+         </div>
+         <div class="ui-block-b">
+           <input type="radio" name="duration" id="duration_2" value="2">
+           <label for="duration_2">2 years</label>
+       </div>
+       </fieldset>
+     </div>
+
+     <div class="row">
+       <fieldset data-role="controlgroup" data-type="horizontal">
+       <div class="ui-grid-a">
+         <div class="ui-block-a">
+           <input type="radio" name="classification" id="classification_new" value="FRESH">
+           <label for="classification_new">New</label>
+         </div>
+         <div class="ui-block-b">
+           <input type="radio" name="classification" id="classification_renew" value="RENEWAL" checked="checked">
+           <label for="classification_renew">Renewal</label>
+         </div>
+       </div>
+       </fieldset>
+     </div>
+
+     <div class="ui-grid-a">
+       <h4 class="ui-block-a">Subscription Amount:</h4>
+       <h2 class="ui-block-b" style="text-align:right;">&#8377; <span id="display_amount">0.00</span></h2>
+     </div>
+
+     <div class="row">
+        <input id="ezetap___ref" name="ezetap___ref" type="text" placeholder="Application Form Number" required="true" tabindex="4">
+        <input id="ezetap_externalRefNumber3" name="ezetap_externalRefNumber3" type="text" placeholder="Old Coupon Number" required="true" tabindex="5">
+     </div>
+
+     <div class="ui-corner-all custom-corners">
+       <div class="ui-bar ui-bar-b">
+         <h3 style="text-align:center;">Customer Details</h3>
+       </div>
+       <div class="ui-body ui-body-a">
+         <input id="ezetap_name" name="ezetap_name" type="text" placeholder="Name" required="true" tabindex="6">
+         <input id="ezetap_mobile" name="ezetap_mobile" type="tel" placeholder="Mobile Number" required="true" tabindex="7">
+         <input id="ezetap_customerEmail" name="ezetap_customerEmail" type="email" placeholder="Email" required="true" tabindex="8">
+       </div>
+     </div>
+     <div class="row">
+       <button type="submit" name="action" class="ui-btn ui-btn-b ui-shadow" onClick="payByCard();return false;" tabindex="9">Pay</button>
+     </div>
+
+     <input type="hidden" id="ezetap_amount" name="ezetap_amount" value="0"/>
+     <input type="hidden" id="ezetap_externalRefNumber2" name="ezetap_externalRefNumber2" value=""/>
+
+     </form>
+     </div>
+
+    </div>
+
+<script type="text/javascript">
+
+var rates = {};
+rates['HT_RENEWAL_1'] = 699;
+rates['HT_FRESH_1'] = 799;
+rates['HT_RENEWAL_2'] = 1099;
+rates['HT_FRESH_2'] = 1199;
+rates['MINT_FRESH_1'] = 989;
+rates['MINT_RENEWAL_1'] = 989;
+
+/*
+ * UI ketchup
+ */
+function calculateAndSetAmount() {
+  var publication = $('input[name=publication]:checked', '#data_collection').val();
+  var classification = $('input[name=classification]:checked', '#data_collection').val();
+  var duration = $('input[name=duration]:checked', '#data_collection').val();
+  var selection_key = publication + '_' + classification + '_' + duration;
+  var amount = rates[selection_key];
+  $("#ezetap_externalRefNumber2").val(selection_key);
+  $("#ezetap_amount").val(amount);
+  $("#display_amount").text(amount);
+}
+
+$(document).ready(function(){
+    calculateAndSetAmount();
+});
+
+$('input:radio').change(function(){
+    var publication = $('input[name=publication]:checked', '#data_collection').val();
+    var whichone = $(this).attr('name');
+    if ('publication' == whichone) {
+      if ('MINT' == publication) {
+        //disable 2 year duration
+        $('input[name=duration][value=2]').prop('checked', false).checkboxradio("refresh");
+        $('input[name=duration][value=1]').prop('checked',true).checkboxradio("refresh");
+        $('#duration_2').prop('disabled', 'disabled').checkboxradio("refresh");
+      } else {
+        $('#duration_2').removeAttr('disabled').checkboxradio("refresh");
+      }
+    }
+    var classification = $('input[name=classification]:checked', '#data_collection').val();
+    var whichone = $(this).attr('name');
+    if ('classification' == whichone) {
+      if ('FRESH' == classification) {
+        $("#ezetap_externalRefNumber3").val("NEW");
+      } else {
+        $("#ezetap_externalRefNumber3").val("");
+      }
+    }
+    calculateAndSetAmount();
+});
+
+function goToNextTabStop(ev) {
+  if (ev.which==13) {
+    ev.preventDefault();
+    var universe = document.querySelectorAll('input, button, select, textarea, a[href]');
+    var list = Array.prototype.filter.call(universe, function(item) {return item.tabIndex >= "0"});
+    var index = list.indexOf(ev.target);
+    var eln = list[index + 1] || list[0];
+    eln.focus();
+  }
+}
+
+$("input[type=text]").keypress(function(event) { goToNextTabStop(event);});
+$("input[type=email]").keypress(function(event) { goToNextTabStop(event);});
+$("input[type=tel]").keypress(function(event) { goToNextTabStop(event);});
+
+$("form").submit(function (e) { e.preventDefault(); });
+
+/*
+ * ezetap stuff
+ */
+function sendToast(msg, valid) {
+  try {
+     if (Ezetap.getMessage != "undefined") { // check the method
+       Ezetap.getMessage(msg, valid);
+     }
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+    console.log("Card Payment Ex - " + e.message);
+  }
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  /* Not required
+  if (json.ezetap_amount < 1) {
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }*/
+  //ensure ref fields are not blank
+  if (json.ezetap___ref == "") {
+    sendToast("Application Form Number is mandatory", false);
+    $('#ezetap___ref').focus();
+    return;
+  }
+  if (json.ezetap_externalRefNumber3 == "") {
+    sendToast("Old Coupon Number is mandatory for Renewals", false);
+    $('#ezetap_externalRefNumber3').focus();
+    return;
+  }
+  //ensure customer details fields are not blank
+  if (json.ezetap_name == "" || json.ezetap_mobile == "" || json.ezetap_customerEmail == "") {
+    sendToast("Customer Details are mandatory", false);
+    if (json.ezetap_name == "") {
+      $('#ezetap_name').focus();
+    } else if (json.ezetap_mobile == "") {
+      $('#ezetap_mobile').focus();
+    } else {
+      $('#ezetap_customerEmail').focus();
+    };
+    return;
+  }
+  return json;
+}
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.setJSResponse(true);
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function transactionCompleted(JSONString) {
+    console.log("Payment Response - " + JSONString);
+}
+
+</script>
+
+  </body>
+</html>

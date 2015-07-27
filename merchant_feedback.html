@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Merchant Feedback Form
+    </title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.superhero.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+	<iframe src="https://docs.google.com/forms/d/1K-222qQYLgIjcAMcDw9Aw0Cg5QA8XsQfBvbpIhXYdCU/viewform?embedded=true" width="760" height="500" frameborder="0" 		marginheight="0" marginwidth="0">Loading...</iframe>
+   </div>
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+     if (typeof Ezetap != "undefined") { // check the bridge 
+        if (Ezetap.getMessage != "undefined") { // check the method
+          Ezetap.getMessage(msg, valid);
+        }
+     }
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }
+  return json;
+}
+
+
+function feedback_recorded() {
+    try {
+      sendToast("Thank you. Your feedback has been recorded.", true);
+      Ezetap.performToDoList());
+    } catch(e) {
+      console.log("Card Payment Ex - " + e.message);
+    }
+}
+</script>
+</html>

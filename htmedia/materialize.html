@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css" media="screen,projection">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+
+  <nav class="gray lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo"><img src="http://www.htmedia.in/images/ht_logo.gif" alt="HT Media"/></a>
+    </div>
+  </nav>
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+     <form action="#">
+     <div class="row">
+       <div class="col s6">
+       <input name="publication" type="radio" id="publication_ht" /><label for="publication_ht">HT</label>
+       </div>
+       <div class="col s6">
+       <input name="publication" type="radio" id="publication_mint" checked/><label for="publication_mint">Mint</label>
+       </div>
+     </div>
+     <div class="row">
+       <div class="col s6">
+       <input name="duration" type="radio" id="duration_1" checked /><label for="duration_1">1 year</label>
+       </div>
+       <div class="col s6">
+       <input name="duration" type="radio" id="duration_2" /><label for="duration_2">2 years</label>
+       </div>
+     </div>
+     <div class="row">
+       <div class="col s6">
+       <input name="classification" type="radio" id="classification_new" checked/><label for="classification_new">New</label>
+       </div>
+       <div class="col s6">
+       <input name="classification" type="radio" id="classification_renew" /><label for="classification_renew">Renewal</label>
+       </div>
+     </div>
+
+     <div class="row">
+        <h6 class="col s8">Subscription Amount</h6>
+        <h6 class="col s4">0.00</h6>
+     </div>
+     <div class="row">
+        <div class="input-field col s12">
+          <input id="eze_appformnumber" type="text" class="validate" required="true">
+          <label for="eze_appformnumber">Application Form Number</label>
+        </div>
+     </div>
+     <div class="row">
+        <div class="input-field col s12">
+          <input id="eze_oldcoupon" type="text" class="validate" >
+          <label for="eze_oldcoupon">Old Coupon Number</label>
+        </div>
+     </div>
+     <div class="row">
+        <h5 class="col s12 center">Customer Info</h5>
+     </div>
+     <div class="row">
+        <div class="input-field col s12">
+          <input id="eze_customername" type="text" class="validate" >
+          <label for="eze_customername">Customer Name</label>
+        </div>
+     </div>
+     <div class="row">
+        <div class="input-field col s12">
+          <input id="eze_customermobile" type="tel" class="validate" >
+          <label for="eze_customermobile">Customer Mobile#</label>
+        </div>
+     </div>
+     <div class="row">
+        <div class="input-field col s12">
+          <input id="eze_customeremail" type="email" class="validate" >
+          <label for="eze_customeremail">Customer Email</label>
+        </div>
+     </div>
+     <div class="row">
+       <button class="btn waves-effect waves-light col s12" type="submit" name="action">Pay
+        <i class="material-icons"></i>
+       </button>
+     </div>
+
+     </form>
+
+    </div>
+  </div>
+
+
+
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+  </body>
+</html>

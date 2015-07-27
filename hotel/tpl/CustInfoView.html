@@ -1,0 +1,35 @@
+
+
+      <form class="form" role="form" id="data_collection">
+      <p class="lead bg-info" style="padding: 5px 5px 5px 5px;">
+          <strong><%- name %></strong><br/>
+          <i class="fa fa-phone fa-lg"></i> <%- mobile %>
+      </p>
+
+      <div style="height: 100px !important; overflow: scroll;">
+      <table class="table table-striped">
+      <% _.each( pending, function (li) { %>
+
+        <tr><td><%- li.service %></td><td class="text-right" style="padding-right:30px;"><i class="fa fa-rupee"></i><%- li.amount %></td></tr>
+
+      <% }) %>
+      </table>
+      </div>
+
+      <div class="form-group has-success">
+        <div class="input-group" >
+          <div class="input-group-addon"><i class="fa fa-rupee fa-lg"></i></div>
+          <input class="form-control input-lg text-right" type="number" id="ezetap_amount" name="ezetap_amount" required="required"
+          value = "<%- total_amount %>"/>
+        </div>
+      </div>
+
+      <input type="hidden" name = "ezetap___ref" id="ezetap___ref" value="<%- id %>"/>
+      <input type="hidden" name = "ezetap_mobile" id="ezetap_mobile" value="<%- mobile %>"/>
+      <input type="hidden" name = "ezetap_name" id="ezetap_name" value="<%- name %>"/>
+
+      <button type="button" onclick="payByCard();return false;" class="btn btn-success btn-lg btn-block EzePayCard"><i class="fa fa-credit-card fa-lg pull-left"></i> Next</button>
+      <button type="button" onclick="Backbone.history.history.back();return false;" class="btn btn-danger btn-lg btn-block"><i class="fa fa-chevron-circle-left fa-lg pull-left"></i> Cancel</button>
+
+
+      </form>

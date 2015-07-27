@@ -1,0 +1,27 @@
+#cart-table {font-size: .8em}
+#cart-table td, #cart-table th {vertical-align: middle;}
+#cart-table .tbl-price {text-align: right;}
+#cart-table .tbl-price-total {font-weight: bold; color: #2779aa; font-size: 1.2em;}
+#cart-table .tbl-price-total-row {background-color: #ccc;}
+
+.basket-footer {text-align: right}
+.basket-item-img {display:inline-block; vertical-align:middle; border:1px #ccc solid; width: 30px; height: 30px;}
+.noProductTxt {text-align: center; padding: 20px; font-size: 1.2em; color: #5393c5;}
+
+@media ( min-width: 10em ) {
+	/* Show the table header rows and set all cells to display: table-cell */
+	.my-custom-breakpoint td,
+	.my-custom-breakpoint th,
+	.my-custom-breakpoint tbody th,
+	.my-custom-breakpoint tbody td,
+	.my-custom-breakpoint thead td,
+	.my-custom-breakpoint thead th {
+		display: table-cell;
+		margin: 0;
+	}
+	/* Hide the labels in each cell */
+	.my-custom-breakpoint td .ui-table-cell-label,
+	.my-custom-breakpoint th .ui-table-cell-label {
+		display: none;
+	}
+}

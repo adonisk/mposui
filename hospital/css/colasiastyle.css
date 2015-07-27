@@ -1,0 +1,44 @@
+html, body {
+  height: 100%;
+}
+body {
+  padding: 0 0 0 0;
+}
+
+.container {
+  max-width: 100%;
+}
+
+
+
+* {
+  margin: 0;
+}
+
+.container {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+  height: 60px; /* .push must be the same height as .footer */
+}
+
+.page-header h1 {
+  font-family: impact;
+}
+
+#content {
+  margin-top: 60px;
+}
+
+.btn {
+  text-align:left;
+}
+
+.btn i {
+  border-right: 1px solid gray;
+  padding-right: 5px;
+  padding-left: 5px;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>mPOS</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link href="css/ratchet.min.css" rel="stylesheet"/>
+    <link href="css/ratchet-theme-android.min.css" rel="stylesheet"/>
+
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+    <style>
+      #amount {
+        font-size:20pt;
+        font-family: monospace;
+        text-align:right;
+        padding: 10px 2px 2px 2px;
+        border: 0;
+        margin-top: 60px;
+      }
+
+      table.table {
+        width: 100%;
+        border-collapse:separate;
+        border-spacing:2px;
+      }
+      table.table tr td {
+        margin: 2px 2px 2px 2px;
+        width: 25%;
+      }
+      .btn {
+        min-width: 24px;
+      }
+    </style>
+    <script src="js/ratchet.min.js"> </script>
+
+  </head>
+  <body>
+
+    <div class="content">
+
+      <input type="number" id="amount" name="amount" placeholder="Rs." value="" readonly="readonly"/>
+
+      <div class="card">
+        <table class="table" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 7 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 8 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 9 </a></td>
+          <td><a href="#" id="backspace" class="btn btn-negative btn-lg btn-block" style="background-color:orange;">  <span class="icon icon-left"></span> </a></td>
+        </tr>
+
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 4 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 5 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 6 </a></td>
+          <td rowspan="3" valign="top">
+            <a id="paycard" href="#" class="btn btn-positive btn-lg btn-block" 
+              style="display:inline-block;height:170px;vertical-align:middle;text-align:center;line-height:160px;">Go</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 1 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 2 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 3 </a></td>
+        </tr>
+
+        <tr>
+          <td><a href="#" id="clear" class="btn btn-negative btn-lg btn-block"> C </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 0 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-outlined btn-lg btn-block" > .00 </a></td>
+        </tr>
+
+        </table>
+      </div>
+
+
+
+    </div>
+
+<nav class="bar bar-tab">
+  <a class="tab-item" href="#">
+    <span class="icon icon-gear"></span>
+    <span class="tab-label">Device</span>
+  </a>
+  <a class="tab-item" href="#">
+    <span class="icon icon-list"></span>
+    <span class="tab-label">Rs. 10,000.00</span>
+  </a>
+  <a class="tab-item" href="#">
+    <span class="icon icon-info"></span>
+    <span class="tab-label">Help</span>
+  </a>
+</nav>
+
+<script src="js/zepto.min.js"></script>
+<script src="ezetap.js"></script>
+
+  </body>
+</html>

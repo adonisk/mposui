@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Kisan Cooperative
+    </title>
+    <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.superhero.min.css">
+    <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+    </head>
+
+    <body>
+
+      <div class="container">
+
+        <div id="start_page">
+
+          <h2>Kisan Cooperative</h2>
+
+          <form role="form" id="data_collection">
+          <div class="row">
+            <div class="col-xs-12 form-group">
+              <label for="ezetap_amount">Amount</label>
+              <div class="input-group" >
+              <div class="input-group-addon">&#8377;</div>
+              <input placeholder="Amount" id="ezetap_amount" name="ezetap_amount" type="tel" class="form-control input-lg" required value="0.0">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 form-group">
+              <label for="ezetap_mobile">Mobile#</label>
+              <div class="input-group" >
+              <div class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></div>
+              <input id="ezetap_mobile" name="ezetap_mobile" type="tel" class="form-control input-lg" required >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group">
+             <button  class="btn btn-success col-xs-12 col-md-3" style="margin:1px 1px 1px 1px;" id="payCard" onclick="payByCard();return false;"><span class="glyphicon glyphicon-credit-card"></span> Pay by Card</button>
+             <button  class="btn btn-warning col-xs-12 col-md-3" style="margin:1px 1px 1px 1px;"id="payCash" onclick="payByCash();return false;"><span class="glyphicon glyphicon-align-center"></span> Pay by Cash</button>
+             <button  class="btn btn-danger col-xs-12 col-md-3" style="margin:1px 1px 1px 1px;" id="payLoan" onclick="payByLoan();return false;"><span class="glyphicon glyphicon-tags"></span> Apply for Credit</button>
+           </div>
+          </div>
+          </form>
+
+
+
+        </div>
+
+      </div>
+
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+     if (typeof Ezetap != "undefined") { // check the bridge 
+        if (Ezetap.getMessage != "undefined") { // check the method
+          Ezetap.getMessage(msg, valid);
+        }
+     }
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+function getWebSetting(setting) {
+ // alert(setting);
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }
+  return json;
+}
+
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.setJSResponse(true);
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCash() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.setJSResponse(true);
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByLoan() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      //Ezetap.setJSResponse(true);
+      paymentJson.amount = paymentJson.ezetap_amount;
+      paymentJson.customer_mobile = paymentJson.ezetap_mobile;
+      paymentJson.externalRefNumber2 = "CREDIT";
+      paymentJson.username = "1100340034";
+      paymentJson.password = "1ad1ad";
+      console.log(JSON.stringify(paymentJson));
+      $.ajax({
+        type: "POST",
+        url: "http://d.eze.cc/api/2.0/payment/cash",
+        data: JSON.stringify(paymentJson),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(resp){
+          //TODO: check if response is successful
+          console.log(JSON.stringify(resp));
+          if (resp.success) {
+            console.log("SUCCESS");
+            alert("Credit application recorded");
+            $("#data_collection")[0].reset();
+            $("#ezetap_amount").focus();
+          }
+        }
+      });
+    } catch(e) {
+      console.log("Loan Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Loan Payment Ex - " + e.message);
+    }
+  }
+}
+
+function transactionCompleted(JSONString) {
+    console.log("Payment Response - " + JSONString);
+    $("#data_collection")[0].reset();
+    $("#ezetap_amount").focus();
+}
+
+$(document).ready(function(){
+  $("#ezetap_amount").focus();
+});
+</script>
+    </body>
+  </html>

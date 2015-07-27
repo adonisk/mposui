@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Ezetap Payment Sample
+    </title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.superhero.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container" style="padding-top:50px;">
+      <form role="form" id="data_collection">
+        <div class="row">
+        <div class="form-group has-info col-xs-12">
+          <div class="input-group" >
+            <div class="input-group-addon">Rs</div>
+            <input class="form-control input-lg" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="" value=""
+            style="background-color:black; color:white; font-size:20pt;line-height:20pt;text-align:right;" />
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group has-info col-xs-12">
+            <input class="form-control input-lg" type="tel" id="ezetap_mobile" name="ezetap_mobile" placeholder="Customer's Mobile" value=""
+            style="background-color:black; color:white; font-size:20pt;line-height:20pt;text-align:right;" />
+        </div>
+        </div>
+<!--
+       <div class="form-group">
+       <label for="ezetap_amount">Amount</label> <input class="form-control" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount"  required> </div>
+       <div class="form-group">
+       <input class="form-control" type="number" id="ezetap_additionalamount" name="ezetap_additionalamount" placeholder="Additional Amount"></div>
+       <div class="form-group">
+       <input class="form-control" type="text" id="ezetap___ref" name="ezetap___ref" placeholder="Order No:"  ></div>
+       <div class="form-group">
+       <input class="form-control" type="tel" id="ezetap_mobile" name="ezetap_mobile" placeholder="Customer Mobile #"  ></div>
+-->
+       <input type="hidden" id="ezetap_processCode" name ="ezetap_processCode" value="_DEF_PROC">
+       <div class="form-group">
+       <button  class="btn btn-block btn-success" id="payCard" onclick="payByCard();return false;">
+       <img src="logo_ezetap.png" alt="Pay By Ezetap" height="57" width="204" />
+       </button>
+       <!--
+       <button  class="btn btn-block btn-info" id="startEzeClick" onclick="payByEzeClick();return false;"><span class="glyphicon glyphicon-asterisk"></span> Pay by American Express EzeClick </button>
+       -->
+       <button type="submit"  class="btn btn-block btn-info" id="startEzeClick" onclick="payByEzeClick();return false;">
+       <img src="logo_safekey.png" alt="Amex EzeClick" height="57" width="257" />
+       </button>
+       </div>
+      </form>
+
+      <form role="form" id="ezeclick_form" style="display:none;"  action="https://payments.billdesk.com/amexezeclick/payment/paymentRequest" method="POST">
+       <input type="hidden" name="MID" value="" id="ezeclick_MID"/>
+       <input type="hidden" name="merchantRequest" value="" id="ezeclick_merchantRequest"/>
+      </form>
+
+   </div>
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+     if (typeof Ezetap != "undefined") { // check the bridge 
+        if (Ezetap.getMessage != "undefined") { // check the method
+          Ezetap.getMessage(msg, valid);
+        }
+     }
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+function getWebSetting(setting) {
+ // alert(setting);
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }
+  return json;
+}
+
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCash() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCheque() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doChequePayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cheque Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cheque Payment Ex - " + e.message);
+    }
+  }
+}
+function payByEzeClick() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      //TODO: remove hard coding of username and appkey...
+      var ezeclickInput = {
+	      "username":"1856565656",
+	      "appKey":"9637e405-7aa9-46a8-97a9-128d202ae780",
+	      "amount": paymentJson.ezetap_amount,
+	      "cnpPg":"AMEXEZECLICK",
+	      "orgCode":"AMEX_EZECLICK_TEST",
+	      "customerMobileNumber":paymentJson.ezetap_mobile
+      };
+      console.log(JSON.stringify(ezeclickInput));
+      $.ajax({
+        type: "POST",
+        url: "https://www.ezetap.com/api/2.0/payment/cnp",
+        data: JSON.stringify(ezeclickInput),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(resp){
+          //TODO: check if response is successful
+          console.log(JSON.stringify(resp));
+          if (resp.success) {
+            //$("#data_collection").hide();
+            $("#ezeclick_MID").val("9820359248");
+            $("#ezeclick_merchantRequest").val(resp.encryptedData);
+            $("#ezeclick_form").submit();
+          }
+        }
+      });
+    } catch(e) {
+      console.log("EzeClick Ex - " + e.message);
+    }
+  }
+}
+</script>
+</html>
+
+<!--vim: ts=2 sw=2 et ai sm nowrap
+-->

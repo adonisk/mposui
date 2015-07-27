@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Speed Airways
+    </title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.superhero.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+<! -- colors: blue 0f2149, yellow f0ea56 -->
+    <div class="page-header navbar-fixed-top bg-warning" style="padding-top:0;margin-top:0;text-align:center;background-color:#0f2149;">
+<!--
+         <img  src="http://www.aerogsa.co.id/img/logo-jetAirways-2.jpg" class="img-responsive img-thumbnail" height="46" width="568">
+//-->
+         <img  src="speedair.png" class="img-responsive img-thumbnail" height="46" width="144">
+    </div>
+    <div class="container" style="margin-top:70px;">
+      <form role="form" id="data_collection">
+       <div class="form-group has-success has-feedback ">
+            <input class="form-control" type="number" id="ezetap_extRef" name="ezetap_extRef" placeholder="Ref#"  required>
+            <span class="glyphicon form-control-feedback"></span>
+       </div>
+       <div class="form-group has-success has-feedback ">
+            <input class="form-control" type="number" id="ezetap_externalRefNumber2" name="ezetap_externalRefNumber2" placeholder="PNR"  required>
+            <span class="glyphicon form-control-feedback"></span>
+       </div>
+       <div class="form-group has-success has-feedback ">
+	    <label for="ezetap_amount">Amount (&#8377;)</label> 
+            <input class="form-control" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount"  required value="0.00">
+            <span class="glyphicon form-control-feedback"></span>
+       </div>
+       <div class="form-group">
+       <label for="ezetap_externalRefNumber3">Service</label>
+        <select class="form-control input-lg" id="ezetap_externalRefNumber3" name="ezetap_externalRefNumber3">
+          <option value="TICKET" selected>Purchase Ticket</option>
+          <option value="BAGGAGE">Extra Baggage</option>
+          <option value="MEAL">Extra Meal</option>
+        </select>
+       </div>
+       <div class="form-group" style="text-align:center;">
+       <button  class="btn btn-success btn-block" id="payCard" onclick="payByCard();return false;"><span class="glyphicon glyphicon-list"></span> Pay by Card</button>
+       </div>
+       <div class="form-group" style="text-align:center;">
+       <button  class="btn btn-warning btn-block" id="payCash" onclick="payByCash();return false;"><span class="glyphicon glyphicon-align-center"></span> Pay by Cash</button>
+       </div>
+       </form>
+   </div>
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+    Ezetap.getMessage(msg, valid);
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+    alert(msg);
+  }
+}
+
+function getWebSetting(setting) {
+  //alert(setting);
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  var pnr = $("#ezetap_amount");
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    set_field_failure(pnr);
+    pnr.focus();
+    return;
+  }
+  set_field_success(pnr);
+  return json;
+}
+
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  if(!checkREF()) return false; if(!checkPNR()) return false;
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCash() {
+  if(!checkREF()) return false; if(!checkPNR()) return false;
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCheque() {
+  if(!checkREF()) return false; if(!checkPNR()) return false;
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doChequePayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cheque Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cheque Payment Ex - " + e.message);
+    }
+  }
+}
+
+function checkPNR() {
+	var pnr = $("#ezetap_externalRefNumber2");
+	if (/^\d{6}$/.test(pnr.val())) {
+	    set_field_success(pnr);
+	} else {
+	    sendToast("Invalid PNR number; must be six digits", false);
+	    set_field_failure(pnr);
+	    pnr.focus();
+	    return false;
+	}
+    return true;
+}
+function checkREF() {
+	var pnr = $("#ezetap_extRef");
+	if (/^\d{10}$/.test(pnr.val())) {
+	    set_field_success(pnr);
+	} else {
+	    sendToast("Invalid REF number; must be ten digits", false);
+	    set_field_failure(pnr);
+	    pnr.focus();
+	    return false;
+	}
+    return true;
+}
+
+$(document).ready(function() {
+   $("input[type='text']").on("click", function () { $(this).select(); });
+   $("#ezetap_extRef").focus();
+   //$("#ezetap_extRef").on("blur", checkREF);
+   //$("#ezetap_externalRefNumber2").on("blur", checkPNR);
+});
+
+function clear_field_indicators(fp, fi){
+  fp.removeClass("has-success"); fp.removeClass("has-error");
+  fi.removeClass("glyphicon-ok"); fi.removeClass("glyphicon-remove"); 
+}
+
+function set_field_success(field) {
+  var p = $(field).parent();
+  var i = p.children("span");
+  clear_field_indicators(p, i);
+  p.addClass("has-success");
+  i.addClass("glyphicon-ok");
+}
+function set_field_failure(field) {
+  var p = $(field).parent();
+  var i = p.children("span");
+  clear_field_indicators(p, i);
+  p.addClass("has-error");
+  i.addClass("glyphicon-remove");
+}
+</script>
+</html>
+<!--
+vim: set ts=2 sw=2 et ai sm :
+--> 
+

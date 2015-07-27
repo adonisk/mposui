@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ezetap Mobile Solutions Pvt Ltd">
+
+    <title>e-Receipt</title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.flatly.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  <style type="text/css">
+  #chargeslip {
+  }
+  </style>
+</head>
+
+<body>
+<div class="container" style="padding-top:25px;">
+<form role="form" method="GET" action="ezeclick_prod.html">
+<div class="form-group">
+<button  class="btn btn-block btn-info">
+Make Another Payment
+</button>
+</div>
+</form>
+<div id="chargeslip"></div>
+</div>
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+function getTxnHash() {
+  var thash = "";
+  params = window.location.search.split(/\?|\&/);
+  if (thash) return thash;
+  var qs = {};
+  params = window.location.search.split(/\?|\&/);
+  params.forEach( function(it) {
+      if (it) {
+        var param = it.split("=");
+        qs[param[0]] = param[1];
+      }
+    });
+  thash = qs.id;
+  if (thash) return thash;
+  //now see if we can get it from top URL - we take the last part of the URL
+  params = window.location.href.split(/\/|\#/);
+  thash = params[params.length-1];
+  return thash;
+}
+
+function getTxn() {
+  var txnhash = "";
+  txnhash = getTxnHash();
+  var surl = "http://eze.cc/r/o/";
+  if ( 0 == window.location.hostname.indexOf("d.eze.cc"))
+    surl = "http://d.eze.cc/r/o/";
+  if  (txnhash) {
+    $("#chargeslip").load(surl + txnhash + " #page");
+  }
+}
+
+$(document).ready(function(){
+    getTxn();
+});
+
+</script>
+</body>
+</html>

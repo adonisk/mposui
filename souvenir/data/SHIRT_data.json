@@ -1,0 +1,16 @@
+[
+	{
+		"product_id": 1,
+		"category": "SHIRT",
+		"title": "Shoo One",
+		"img": "ss1.jpg",
+		"price": 15.00
+	},
+	{
+		"product_id": 2,
+		"category": "SHIRT",
+		"title": "Shoo Two",
+		"img": "ss2.jpg",
+		"price": 13.00
+	}
+]

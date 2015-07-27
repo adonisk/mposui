@@ -1,0 +1,176 @@
+  <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="mPOS">
+    <meta name="author" content="satheesh@ezetap.com">
+
+    <link rel="shortcut icon" type="image/x-icon" href="assets/ico/favicon.ico" />
+    <link rel="icon" sizes="196x196" href="assets/ico/icon-196x196.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>mPOS</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/bootstrap.darkly.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/alertify.core.css" rel="stylesheet"/>
+    <link href="css/alertify.default.css" rel="stylesheet" />
+
+<style>
+.row {
+  margin-top: 8px;
+}
+
+.btn {
+  text-align: center;
+  width: 100%;
+}
+
+#content {
+  width: 300px;
+  margin: 0 auto;
+}
+
+#content table td {
+  margin: 2px 2px 2px 2px;
+}
+/*
+.container, #content {
+  padding-left: 0px; padding-right: 0px; margin-left:1px;margin-right:1px;
+}
+*/
+</style>
+
+  </head>
+
+  <body>
+
+
+    <div class="container">
+      <div id="content">
+
+
+
+<div class="row">
+<div class="form-group has-info col-xs-12">
+  <div class="input-group" >
+    <div class="input-group-addon"><i class="fa fa-rupee fa-lg"></i></div>
+    <input class="form-control input-lg" type="number" id="amount" name="amount" placeholder="" value=""
+    style="background-color:black; color:white; font-size:20pt;line-height:20pt;text-align:right;"  readonly="readonly"/>
+  </div>
+</div>
+</div>
+
+<div class="row">
+<table class=" table  table-condensed table-responsive">
+<tr>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">7</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">8</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">9</a></td>
+<td><a href="#" id="backspace" class="btn btn-warning btn-lg btn-block"> <i class="fa fa-arrow-left"></i></a></td>
+</tr>
+
+<tr>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">4</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">5</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">6</a></td>
+<td rowspan="3"><a id="paycard" type="a" class="btn btn-success btn-lg btn-block" style="line-height:180px;"><i class="fa fa-credit-card"></i></a></td>
+</tr>
+
+<tr>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">1</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">2</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">3</a></td>
+</tr>
+
+<tr>
+<td><a href="#" id="clear" class="btn btn-danger btn-lg btn-block">C</a></td>
+<td><a href="#" class="kb btn btn-primary btn-lg btn-block">0</a></td>
+<td><a href="#" class="kb btn btn-info btn-lg btn-block">.00</a></td>
+</tr>
+
+</table>
+
+</div>
+
+
+
+      </div>
+    </div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/alertify.min.js"></script>
+
+<script>
+
+$("a.kb").click(function(e) {
+  var pressed = $(this).text().trim();
+  var amount = getAmount();
+  var txtamount = amount.replace(".", "");
+  var res = "";
+  res = txtamount.concat(pressed);
+  setAmount(res);
+});
+
+$("#backspace").click(function(e) {
+  var amount = getAmount();
+  if (amount!="") {
+    var res = amount.slice(0, amount.length-1);
+    if (res=="0.0" || res=="0." || res=="") res = "0.00";
+    setAmount(res);
+  }
+});
+$("#clear").click(function(e) {
+  setAmount("");
+});
+
+function setAmount(a) {
+  var res = a.replace(".", "");
+  //this never has a decimal. we add a decimal at the -3 position
+  if (parseFloat(res)==0.00 || res=="" ) {
+    $("#amount").val("");
+    $("#paycard").prop("disabled", true);
+    return;
+  };
+  if (res.length >= 3) {
+    res = res.slice(0, res.length-2).concat(".", res.slice(res.length-2, res.length));
+  } else {
+    res = ".".concat(res);
+  }
+  $("#amount").val(res);
+  $("#paycard").prop("disabled", false);
+}
+
+function getAmount() {
+  var amount = $("#amount").val().trim();
+  return amount;
+}
+
+$("#paycard").click(function(e){
+  var paymentJson = {};
+  paymentJson.ezetap_amount = parseFloat(getAmount()).toFixed(2);
+  setAmount(paymentJson.ezetap_amount);
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+});
+
+$(document).ready(function(){
+  $("#paycard").prop("disabled", true);
+  alertify.success("Please prepare device!");
+})
+
+</script>
+
+</body>
+</html>

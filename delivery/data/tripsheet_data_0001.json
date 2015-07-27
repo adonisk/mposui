@@ -1,0 +1,159 @@
+{
+  "items" : [
+
+    {
+      "shipment_id": 11,
+      "order_id": "AAIP0011",
+      "amount": 5700,
+      "status": "pending",
+      "payment_mode": "COD",
+      "customer": {
+          "name": "Ankit Govil"
+        , "mobile": "09535010768"
+        , "email": "satheesh@ezetap.com"
+        , "address" : {
+              "house": "246 Okhla Industrial Estate"
+            , "street": "Phase - III"
+            , "locality": "New Delhi"
+            , "city": "Delhi"
+            , "pincode": "110020"
+            , "latitude": 28.551586
+            , "longitude": 77.269905
+        }
+      },
+      "lines": [
+          {"sku":"431167130", "name":"Xolo One - Black", "price": 5500, "quantity": 1, "amount": 5500}
+        , {"sku":"431167130_sg", "name":"Xolo One Screen Guard", "price": 50, "quantity": 2, "amount": 100}
+        , {"sku":"USB_CHARGER", "name":"USB Charger", "price": 100, "quantity": 1, "amount": 100}
+      ]
+    }
+    ,
+    {
+      "shipment_id": 12,
+      "order_id": "AAIP0012",
+      "amount": 14500,
+      "status": "pending",
+      "payment_mode": "COD",
+      "customer": {
+          "name": "Abhijit Bose"
+        , "mobile": "09945090224"
+        , "address" : {
+              "house": "A23, Sarita Vihar"
+            , "street": "Mathura Road"
+            , "locality": "New Delhi"
+            , "city": "Delhi"
+            , "pincode": "110044"
+            , "latitude": 28.551586
+            , "longitude": 77.269905
+        }
+      },
+      "lines": [
+          {"sku":"150682654", "name":"Nokia Lumia 730 Dual Sim", "price": 14000, "quantity": 1, "amount": 14000}
+          ,{"sku":"150682654_sg", "name":"Lumia 730 Flip Cover", "price": 500, "quantity": 1, "amount": 500}
+      ]
+    }
+    ,
+    {
+      "shipment_id": 13,
+      "order_id": "XBBL0025",
+      "amount": 22989,
+      "status": "pending",
+      "payment_mode": "COD",
+      "customer": {
+          "name": "Ankit Govil"
+        , "mobile": "09535010768"
+        , "address" : {
+              "house": "Shakunthala Building"
+            , "street": "305 Nehru Place"
+            , "locality": "New Delhi"
+            , "city": "Delhi"
+            , "pincode": "110019"
+            , "latitude": 28.5489828
+            , "longitude": 77.2526568
+        }
+      },
+      "lines": [
+          {"sku":"1556812847", "name":"Notion Ink Cain 2 in 1", "price": 19990, "quantity": 1, "amount": 19990}
+         ,{"sku":"1709999463", "name":"Google Chromecast", "price": 2999, "quantity": 1, "amount": 2999}
+      ]
+    }
+    ,
+    {
+      "shipment_id": 1,
+      "order_id": "AAIP0001",
+      "amount": 5700,
+      "status": "pending",
+      "payment_mode": "COD",
+      "customer": {
+          "name": "Ankit Satheesh"
+        , "mobile": "09535010768"
+        , "email": "satheesh@ezetap.com"
+        , "address" : {
+              "house": "111B Aditya Apts"
+            , "street": "No 9, 1st Main"
+            , "locality": "Ashwini Layout"
+            , "city": "Bangalore"
+            , "pincode": "560047"
+            , "latitude": 12.9406893
+            , "longitude": 77.62687772
+        }
+      },
+      "lines": [
+          {"sku":"431167130", "name":"Xolo One - Black", "price": 5500, "quantity": 1, "amount": 5500}
+        , {"sku":"431167130_sg", "name":"Xolo One Screen Guard", "price": 50, "quantity": 2, "amount": 100}
+        , {"sku":"USB_CHARGER", "name":"USB Charger", "price": 100, "quantity": 1, "amount": 100}
+      ]
+    }
+    ,
+    {
+      "shipment_id": 2,
+      "order_id": "AAIP0002",
+      "amount": 14500,
+      "status": "pending",
+      "payment_mode": "PREPAID",
+      "customer": {
+          "name": "Ankit Karthik S"
+        , "mobile": "09535010768"
+        , "address" : {
+              "house": "Krispy Kreme"
+            , "street": "12th Main, HAL 2nd Stage"
+            , "locality": "Indiranagar"
+            , "city": "Bangalore"
+            , "pincode": "560038"
+            , "latitude": 12.9702844
+            , "longitude": 77.66419371
+        }
+      },
+      "lines": [
+          {"sku":"150682654", "name":"Nokia Lumia 730 Dual Sim", "price": 14000, "quantity": 1, "amount": 14000}
+          ,{"sku":"150682654_sg", "name":"Lumia 730 Flip Cover", "price": 500, "quantity": 1, "amount": 500}
+      ]
+    }
+    ,
+    {
+      "shipment_id": 3,
+      "order_id": "XBBL0015",
+      "amount": 22989,
+      "status": "pending",
+      "payment_mode": "COD",
+      "customer": {
+          "name": "Ankit G Lane"
+        , "mobile": "09535010768"
+        , "address" : {
+              "house": "Agarwal Bhavan"
+            , "street": "No 150, 9th Main, 6th Sector"
+            , "locality": "HSR Layout"
+            , "city": "Bangalore"
+            , "pincode": "560102"
+            , "latitude": 12.912858
+            , "longitude": 77.63537
+        }
+      },
+      "lines": [
+          {"sku":"1556812847", "name":"Notion Ink Cain 2 in 1", "price": 19990, "quantity": 1, "amount": 19990}
+         ,{"sku":"1709999463", "name":"Google Chromecast", "price": 2999, "quantity": 1, "amount": 2999}
+      ]
+    }
+
+  ]
+}

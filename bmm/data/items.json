@@ -1,0 +1,43 @@
+[
+	{
+		"product_id": 1,
+		"title": "T-Shirt (Adult)",
+		"img": "ts-1.jpg",
+		"price": 400.00
+	}
+  ,
+	{
+		"product_id": 2,
+		"title": "T-Shirt (Junior)",
+		"img": "ts-2.jpg",
+		"price": 200.00
+	}
+  ,
+	{
+		"product_id": 3,
+		"title": "Mugs",
+		"img": "mugs.jpg",
+		"price": 200.00
+	}
+  ,
+	{
+		"product_id": 4,
+		"title": "Photo with Milkha Singh",
+		"img": "milkha.jpg",
+		"price": -1
+	}
+  ,
+	{
+		"product_id": 5,
+		"title": "Donation to RBITC",
+		"img": "rbitc.png",
+		"price": -1
+	}
+  ,
+	{
+		"product_id": 5,
+		"title": "Other",
+		"img": "others.jpg",
+		"price": -1
+	}
+]

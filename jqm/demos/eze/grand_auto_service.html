@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Multi-page template</title>
+	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.2.min.css">
+	<link rel="shortcut icon" href="../favicon.ico">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/jquery.mobile-1.4.2.min.js"></script>
+	<script id="script" src="https://rawgithub.com/arschmitz/jquery-mobile-nestedlists/master/jquery.mobile.nestedlists.js"></script>
+</head>
+<body>
+<!-- Start of first page: #one -->
+<div data-role="page" id="one" data-theme="b">
+
+	<div data-role="header">
+		<h1>Grand Car Service</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content" >
+     <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider" data-theme="b"><h1>Make</h1></li>
+          <li>
+     Audi
+     <ul>
+         <li>
+           A3
+                 <ul>
+                    <li id="Audi_A3_1" onClick="setFields(this, 7653);"> 1 Service - Rs.7653</li>
+                    <li id="Audi_A3_2" onClick="setFields(this, 5658);"> 2 Service - Rs.5658</li>
+                 </ul>
+         </li>
+         <li>
+           A4
+                 <ul>
+                    <li id="Audi_A4_1" onClick="setFields(this, 2388);"> 1 Service - Rs.2388</li>
+                    <li id="Audi_A4_2" onClick="setFields(this, 9679);"> 2 Service - Rs.9679</li>
+                 </ul>
+         </li>
+         <li>
+           A6
+                 <ul>
+                    <li id="Audi_A6_1" onClick="setFields(this, 9513);"> 1 Service - Rs.9513</li>
+                 </ul>
+         </li>
+         <li>
+           A8
+                 <ul>
+                    <li id="Audi_A8_1" onClick="setFields(this, 9338);"> 1 Service - Rs.9338</li>
+                    <li id="Audi_A8_2" onClick="setFields(this, 6840);"> 2 Service - Rs.6840</li>
+                    <li id="Audi_A8_3" onClick="setFields(this, 5355);"> 3 Service - Rs.5355</li>
+                 </ul>
+         </li>
+         <li>
+           Q3
+                 <ul>
+                    <li id="Audi_Q3_1" onClick="setFields(this, 2887);"> 1 Service - Rs.2887</li>
+                    <li id="Audi_Q3_2" onClick="setFields(this, 2174);"> 2 Service - Rs.2174</li>
+                 </ul>
+         </li>
+         <li>
+           Q5
+                 <ul>
+                    <li id="Audi_Q5_1" onClick="setFields(this, 1533);"> 1 Service - Rs.1533</li>
+                 </ul>
+         </li>
+         <li>
+           Q7
+                 <ul>
+                    <li id="Audi_Q7_1" onClick="setFields(this, 2237);"> 1 Service - Rs.2237</li>
+                 </ul>
+         </li>
+      </ul>
+  </li>
+  <li>
+     BMW
+     <ul>
+         <li>
+           3-Series
+                 <ul>
+                    <li id="BMW_3-Series_1" onClick="setFields(this, 3230);"> 1 Service - Rs.3230</li>
+                    <li id="BMW_3-Series_2" onClick="setFields(this, 3837);"> 2 Service - Rs.3837</li>
+                 </ul>
+         </li>
+         <li>
+           5-Series
+                 <ul>
+                    <li id="BMW_5-Series_1" onClick="setFields(this, 5923);"> 1 Service - Rs.5923</li>
+                    <li id="BMW_5-Series_2" onClick="setFields(this, 5263);"> 2 Service - Rs.5263</li>
+                    <li id="BMW_5-Series_3" onClick="setFields(this, 8416);"> 3 Service - Rs.8416</li>
+                    <li id="BMW_5-Series_4" onClick="setFields(this, 937);"> 4 Service - Rs.0937</li>
+                 </ul>
+         </li>
+         <li>
+           6-Series
+                 <ul>
+                    <li id="BMW_6-Series_1" onClick="setFields(this, 8852);"> 1 Service - Rs.8852</li>
+                    <li id="BMW_6-Series_2" onClick="setFields(this, 9326);"> 2 Service - Rs.9326</li>
+                 </ul>
+         </li>
+         <li>
+           7-Series
+                 <ul>
+                    <li id="BMW_7-Series_1" onClick="setFields(this, 173);"> 1 Service - Rs.0173</li>
+                 </ul>
+         </li>
+         <li>
+           X1
+                 <ul>
+                    <li id="BMW_X1_1" onClick="setFields(this, 6936);"> 1 Service - Rs.6936</li>
+                 </ul>
+         </li>
+         <li>
+           X3
+                 <ul>
+                    <li id="BMW_X3_1" onClick="setFields(this, 5226);"> 1 Service - Rs.5226</li>
+                    <li id="BMW_X3_2" onClick="setFields(this, 8488);"> 2 Service - Rs.8488</li>
+                    <li id="BMW_X3_3" onClick="setFields(this, 6313);"> 3 Service - Rs.6313</li>
+                    <li id="BMW_X3_4" onClick="setFields(this, 981);"> 4 Service - Rs.0981</li>
+                 </ul>
+         </li>
+         <li>
+           X5
+                 <ul>
+                    <li id="BMW_X5_1" onClick="setFields(this, 8590);"> 1 Service - Rs.8590</li>
+                 </ul>
+         </li>
+      </ul>
+  </li>
+  <li>
+     Mercedes
+     <ul>
+         <li>
+           C-Class
+                 <ul>
+                    <li id="Mercedes_C-Class_1" onClick="setFields(this, 7645);"> 1 Service - Rs.7645</li>
+                    <li id="Mercedes_C-Class_2" onClick="setFields(this, 2287);"> 2 Service - Rs.2287</li>
+                    <li id="Mercedes_C-Class_3" onClick="setFields(this, 59);"> 3 Service - Rs.0059</li>
+                 </ul>
+         </li>
+         <li>
+           E-Class
+                 <ul>
+                    <li id="Mercedes_E-Class_1" onClick="setFields(this, 7899);"> 1 Service - Rs.7899</li>
+                    <li id="Mercedes_E-Class_2" onClick="setFields(this, 167);"> 2 Service - Rs.0167</li>
+                 </ul>
+         </li>
+         <li>
+           S-Class
+                 <ul>
+                    <li id="Mercedes_S-Class_1" onClick="setFields(this, 5060);"> 1 Service - Rs.5060</li>
+                    <li id="Mercedes_S-Class_2" onClick="setFields(this, 4592);"> 2 Service - Rs.4592</li>
+                 </ul>
+         </li>
+         <li>
+           M-Class
+                 <ul>
+                    <li id="Mercedes_M-Class_1" onClick="setFields(this, 1093);"> 1 Service - Rs.1093</li>
+                    <li id="Mercedes_M-Class_2" onClick="setFields(this, 3279);"> 2 Service - Rs.3279</li>
+                    <li id="Mercedes_M-Class_3" onClick="setFields(this, 3314);"> 3 Service - Rs.3314</li>
+                 </ul>
+         </li>
+         <li>
+           GL-Class
+                 <ul>
+                    <li id="Mercedes_GL-Class_1" onClick="setFields(this, 2662);"> 1 Service - Rs.2662</li>
+                    <li id="Mercedes_GL-Class_2" onClick="setFields(this, 9426);"> 2 Service - Rs.9426</li>
+                 </ul>
+         </li>
+      </ul>
+  </li>
+     </ul>
+    </div>
+</div><!-- /page one -->
+
+<div data-role="page" id="two" data-theme="b">
+
+    <div data-role="header">
+        <h1>Grand Car Service</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content" >
+     <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider" data-theme="b"><h1 id="summary">Order</h1></li>
+          <li>
+    <form>
+        <input id="ezetap_amount" type="hidden"  value="0"/>
+        <input id="ezetap__ref" type="hidden" value="make"/>
+        <input id="ezetap_externalRefNumber2" type="hidden" value="model"/>
+        <input id="ezetap_externalRefNumber3" type="hidden" value="service"/>
+
+        <input id="ezetap_mobile" type="tel" value="" placeholder="Mobile Number"/>
+        <input id="ezetap_name" type="text" value="" placeholder="Customer name"/>
+     </form>
+            </li>
+        </li>
+    </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+(function( $, window, undefined ) {
+    $.mobile.document.on("pagecreate", "div", function(){
+        $("ul>li>ul").css("display","none");
+        $("ul>li>ul").parent().addClass("ui-btn ui-btn-icon-right ui-icon-carat-r");
+    });
+    $.mobile.document.on( "click", ".ui-listview>li", function(){
+        if( $(this).children( "ul" ).length == 0 ) {
+            return;
+        }
+        var newPage = $.mobile.nestedlists.page.clone().uniqueId(),
+            nestedList  = $( this ).children("ul").clone().attr( "data-" + $.mobile.ns + "role", "listview" ).css("display","block"),
+            pageName = ( $( this.childNodes[0] ).text().replace(/^\s+|\s+$/g, '').length > 0 )? $( this.childNodes[0] ).text() : $( this.childNodes[1] ).text(),
+            pageID = newPage.attr( "id" );
+            newPage.attr("data-theme", "b");
+        // Build new page
+        newPage.append($.mobile.nestedlists.header.clone().find("h1").text(pageName).end())
+            .append($.mobile.nestedlists.content.clone())
+            .find("div.ui-content").append(nestedList);
+        $.mobile.pageContainer.append(newPage);
+        $.mobile.changePage( "#" + pageID );
+        // Remove Nested Page
+        $.mobile.document.one( "pagechange", function(){
+            $.mobile.document.one( "pagechange", function(){
+                $.mobile.document.one( "pagechange", function(){
+                    $(".nested-list-page").remove();
+                });
+            });
+        });
+    });
+    $.extend( $.mobile, {
+        nestedlists: {
+            page: $("<div data-role='page'></div>"),
+            header: $("<div data-role='header'><a href='#' data-rel='back'>Back</a><h1></h1></div>"),
+            content: $("<div class='ui-content'></div>")
+        }
+    });
+})( jQuery, this );
+
+function setFields(qualifier, amount) {
+    var exploded = qualifier.id.split("_");
+    var make = exploded[0];
+    var model = exploded[1];
+    var service = exploded[2] + " Service";
+    $('#ezetap_amount').val(amount);
+    $('#ezetap__ref').val(qualifier.id);
+    $('#ezetap_externalRefNumber2').val(model);
+    $('#ezetap_externalRefNumber3').val(service);
+    $('#summary').text(make + " " + model + " " + service + " = Rs." + amount);
+    $.mobile.changePage($('#two'));
+
+}
+
+</script>
+</body>
+</html>
+

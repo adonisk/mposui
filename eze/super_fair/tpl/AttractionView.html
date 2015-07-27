@@ -1,0 +1,46 @@
+<header class="bar bar-nav">
+    <a class="btn btn-link btn-nav pull-left btn-back">
+        <span class="icon icon-left-nav"></span>
+        Back
+    </a>
+    <h1 class="title">Buy Tickets</h1>
+</header>
+<div class='content'>
+    <div class="details">
+        <img src='pics/attract_00<%= id %>.jpg'/>
+        <h1><%= Name %></h1>
+        <p>
+            <%= title %>
+        </p>
+        <br/>
+        <br/>
+    </div>
+
+    <div class="details">
+     <form class="input-group">
+        <div class="input-row">
+          <label>#Adults  (Rs. <span id="adults-charge"><%= priceForAdult%></span>)</label>
+          <input type="number" placeholder="0" id="num-adults"  onChange="recalculateTotal();">
+        </div>
+        <div class="input-row">
+          <label>#Children  (Rs. <span id="children-charge"><%= priceForChild%></span>)</label>
+          <input type="number" placeholder="0" id="num-children"  onChange="recalculateTotal();">
+        </div>
+ 
+        <div class="input-row">
+          <label>Total Amount</label>
+          <input type="number" disabled="true" id="eze_amount" name="eze_amount" value="0">
+        </div>
+ 
+        <div class="input-row">
+          <label>Mobile#</label>
+          <input type="tel" id="ezetap_mobile" name="ezetap_mobile" placeholder="+91"  >
+        </div>
+
+        <button class="btn btn-positive btn-block" onclick="payByCard()">Pay By Card</button>
+        <button class="btn btn-primary btn-block" onclick="payByCash()">Pay By Cash</button>
+ 
+      </form>
+    </div>
+
+<div>

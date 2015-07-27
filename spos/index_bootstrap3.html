@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="mPOS">
+    <meta name="author" content="satheesh@ezetap.com">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>mPOS</title>
+
+    <link href="css/bootstrap.darkly.min.css" rel="stylesheet" />
+
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+  <style>
+  .row {
+    margin-top: 8px;
+  }
+
+  /*
+  .container, #content {
+    padding-left: 0px; padding-right: 0px; margin-left:1px;margin-right:1px;
+  }
+  */
+  </style>
+
+  </head>
+
+  <body>
+
+
+    <div class="container">
+      <div id="content">
+
+        <div class="row">
+        <div class="form-group has-info">
+          <div class="input-group" >
+            <div class="input-group-addon">Rs</div>
+            <input class="form-control input-lg" type="number" id="amount" name="amount" placeholder="" value=""
+            style="background-color:black; color:white; font-size:20pt;line-height:20pt;text-align:right;"  readonly="readonly"/>
+          </div>
+        </div>
+        </div>
+
+        <div class="row">
+        <table class="table">
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 7 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 8 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 9 </a></td>
+          <td><a href="#" id="backspace" class="btn btn-warning btn-lg btn-block"> <i class="glyphicon glyphicon-arrow-left"></i> </a></td>
+        </tr>
+
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 4 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 5 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 6 </a></td>
+          <td rowspan="3"><a id="paycard" href="#"  class="btn btn-success btn-lg btn-block" style="line-height:180px;"><i class="glyphicon glyphicon-credit-card"></i></a></td>
+        </tr>
+
+        <tr>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 1 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 2 </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 3 </a></td>
+        </tr>
+
+        <tr>
+          <td><a href="#" id="clear" class="btn btn-danger btn-lg btn-block"> C </a></td>
+          <td><a href="#" class="kb btn btn-primary btn-lg btn-block"> 0 </a></td>
+          <td><a href="#" class="kb btn btn-info btn-lg btn-block"> .00 </a></td>
+        </tr>
+
+        </table>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
+
+<script src="js/zepto.min.js"></script>
+<script type="application/javascript" src="js/fastclick.js"></script>
+<script src="ezetap.js"></script>
+
+<script type="application/javascript">
+$(function() {
+  FastClick.attach(document.body);
+});
+</script>
+
+
+</body>
+</html>

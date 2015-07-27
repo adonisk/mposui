@@ -1,0 +1,354 @@
+head	1.3;
+access;
+symbols;
+locks
+	root:1.3; strict;
+comment	@# @;
+
+
+1.3
+date	2014.03.26.06.02.59;	author root;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2014.03.26.05.51.19;	author root;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2014.03.26.04.53.50;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@Intiial
+@
+
+
+1.3
+log
+@Minor fixes
+@
+text
+@<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Ezetap Payment Sample
+    </title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.superhero.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h3> Ezetap Payment </h3>
+      <form role="form" id="data_collection">
+       <div class="form-group">
+       <label for="ezetap_amount">Amount</label> <input class="form-control" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount"  required> </div>
+       <div class="form-group">
+       <input class="form-control" type="number" id="ezetap_additionalamount" name="ezetap_additionalamount" placeholder="Additional Amount"></div>
+       <div class="form-group">
+       <input class="form-control" type="text" id="ezetap___ref" name="ezetap___ref" placeholder="Order No:"  ></div>
+       <div class="form-group">
+       <input class="form-control" type="tel" id="ezetap_mobile" name="ezetap_mobile" placeholder="Customer Mobile #"  ></div>
+       <div class="form-group">
+       <input class="form-control" type="text" id="ezetap_name" name="ezetap_name" placeholder="Customer Name"  ></div>
+       <div class="form-group">
+       <input class="form-control" type="text" id="ezetap_customerEmail" name="ezetap_customerEmail" placeholder="Customer Email ID"  ></div>
+       <div class="form-group">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="ezetap_processCode" name ="ezetap_processCode" value="_DEF_PROC"> Default Process Code
+          </label>
+        </div>
+       </div>
+       <div class="form-group">
+        <div class="radio">
+          <label>
+            <input type="radio" name="ezetap_externalRefNumber2" id="externalRefNumber2_1" value="VAL1" checked>
+            Ref2: VAL 1
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="ezetap_externalRefNumber2" id="externalRefNumber2_2" value="VAL2">
+            Ref2: VAL 2
+          </label>
+        </div>
+       </div>
+       <div class="form-group">
+       <label for="ezetap_externalRefNumber3">External Ref3</label>
+        <select class="form-control" id="ezetap_externalRefNumber3" name="ezetap_externalRefNumber3">
+          <option value="ONE">One</option>
+          <option value="TWO">Two</option>
+          <option value="THREE">Three</option>
+        </select>
+       </div>
+       <hr/>
+         Some additional fields not needed for Ezetap, but needed for customer
+       <div class="form-group">
+       <input class="form-control" type="text" id="orderClassification" name="orderClassification" placeholder="orderClassification"/></div>
+       <div class="form-group">
+       <input class="form-control" type="text" id="customerCategory" name="customerCategory" placeholder="customerCategory"/></div>
+       <button  class="btn btn-success" id="payCard" onclick="payByCard();return false;">Pay by Card</button>
+       <button  class="btn btn-warning" id="payCash" onclick="payByCash();return false;">Pay by Cash</button>
+       </form>
+   </div>
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+    Ezetap.getMessage(msg, valid);
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount != "") json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }
+  return json;
+}
+
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCash() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCheque() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doChequePayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cheque Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cheque Payment Ex - " + e.message);
+    }
+  }
+}
+</script>
+</html>
+<!--
+vim: set ts=2 sw=2 et ai sm :
+--> 
+@
+
+
+1.2
+log
+@Refactored .
+@
+text
+@d10 1
+a10 1
+      Custom WebView
+d17 1
+a17 1
+      <h3> WebView Payment Input </h3>
+d54 1
+a54 1
+        <select class="form-control">
+d100 1
+a100 1
+  if (json.ezetap_amount != "") json.ezetap_amount = parseFloat(json.ezetap_amount);
+d102 1
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d18 1
+a18 1
+      <form role="form">
+d20 1
+a20 1
+       <label for="ezetap_amount">Amount</label> <input class="form-control" type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount"  > </div>
+d22 1
+a22 1
+       <input class="form-control" type="number" id="ezetap_additionalamount" name="additionalamount" placeholder="Additional Amount"></div>
+d34 1
+a34 1
+            <input type="checkbox" value="_DEF_PROC"> Default Process Code
+d49 2
+a50 1
+        </label>
+d66 2
+a67 2
+       <button  class="btn btn-success" id="payCard" onclick="payByCard()">Pay by Card</button>
+       <button  class="btn btn-warning" id="payCash" onclick="payByCash()">Pay by Cash</button>
+d71 1
+d81 5
+a85 1
+  WebView.getMessage(msg, valid);
+d88 18
+a105 9
+function sendFormData(){
+  var keys = new Array();
+  var values = new Array();
+  var index = 0;
+  var element = document.getElementById('ezetap_amount');
+  var value = element.value;
+  if(value == null || value.trim()==""){
+    sendToast("Amount cannot be left blank", false);
+    element.focus();
+d108 1
+a108 85
+  else{
+    values[index] = value;
+    keys[index] = "ezetap_amount";
+    index = index + 1;
+  }
+  element = document.getElementById('ezetap_name');
+   value = element.value;
+  if(value == null || value.trim()==""){
+  //  sendToast("Customer Name cannot be left blank", false);
+  //  element.focus();
+  //  return;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_name";
+    index = index + 1;
+  }
+  element = document.getElementById('ezetap_mobile');
+   value = element.value;
+  if(value == null || value.trim()==""){
+  //  sendToast("Mobile No cannot be left blank", false);
+  //  element.focus();
+  //  return;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_mobile";
+    index = index + 1;
+  }
+  element = document.getElementById('ezetap___ref');
+   value = element.value;
+  if(value == null || value.trim()==""){
+  //  sendToast("Order No cannot be left blank", false);
+  //  element.focus();
+  //  return;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap___ref";
+    index = index + 1;
+  }
+  value = document.getElementById('ezetap_customerEmail').value;
+  if(value == null || value.trim()==""){
+    // do nothing;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_customerEmail";
+    index = index + 1;
+  }
+  value = document.getElementById('ezetap_processCode').value;
+  if(value == null || value.trim()==""){
+    // do nothing;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_processCode";
+    index = index + 1;
+  }
+  value = document.getElementById('ezetap_externalRefNumber2').value;
+  if(value == null || value.trim()==""){
+    // do nothing;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_externalRefNumber2";
+    index = index + 1;
+  }
+  value = document.getElementById('ezetap_externalRefNumber3').value;
+  if(value == null || value.trim()==""){
+    // do nothing;
+  }
+  else
+  {
+    values[index] = value;
+    keys[index] = "ezetap_externalRefNumber3";
+    index = index + 1;
+  }
+  if(index > 0) WebView.getFormData(JSON.stringify(keys), JSON.stringify(values));
+d114 9
+a122 3
+  var paymentJson = getCardPaymentJson();
+  if (paymentJson)  //if json is empty or false, don't call ezetap
+    WebView.doPayment("web_btn_card_pymt", JSON.stringify(paymentJson));
+d126 9
+a134 1
+  WebView.doPayment("web_btn_cash_pymt");
+d138 9
+a146 1
+  WebView.doPayment("web_btn_cheque_pymt");
+a148 1
+</body>
+d151 1
+a151 1
+vim: set ts=2 sw=2 et ai :
+@

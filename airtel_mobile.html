@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Airtel</title>
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link href="eze/lib/ratchet/css/ratchet.css" rel="stylesheet">
+
+    <link href="eze/lib/ratchet/css/ratchet-theme-android.css" rel="stylesheet">
+
+    <script src="eze/lib/ratchet/js/ratchet.js"></script>
+    <script src="eze/lib/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <!-- Make sure all your bars are the first things in your <body> -->
+    <header class="bar bar-nav" style="text-align:center;background-color:red;">
+      <a class="icon icon-left-nav pull-left" href="airtel.html" data-transition="slide-out"></a>
+      <h1 class="title" style="color:white;font-weight:bold;">
+         Postpaid Mobile
+         <img  src="http://www.airtel.in/wps/wcm/connect/f3ea75c8-0f26-4c87-b843-7411f3819913/logo.jpg?MOD=AJPERES&CACHEID=f3ea75c8-0f26-4c87-b843-7411f3819913" class="img-responsive  img-thumbnail pull-right" style="background-color:red;margin:5px 0 0 0; padding:10; border:0;" height="37" width="114" alt="Airtel"/>
+      </h1>
+    </header>
+
+    <div class="content">
+
+      <div class="content-padded">
+        <p><!-- if we need to keep some marketing material... --></p>
+      </div>
+
+      <div class="content-padded">
+      <form>
+        <input type="text" placeholder="Mobile#" id="in_mobile">
+        <input type="text" placeholder="Customer ID" id="in_custid">
+        <button class="btn btn-negative btn-block" data-ignore="push" id="getcustomerdetails"> <span class="icon icon-search"></span> Get Bill</button>
+      </form>
+      </div>
+
+      <div class="content-padded"  id="customerdetails" style="visibility:hidden;">
+        <form class="input-group">
+          <div class="input-row">
+            <label>Name</label>
+            <input type="text" value="Mr. Harry Potter" disabled readonly>
+          </div>
+          <div class="input-row">
+            <label>Email</label>
+            <input type="email" value="potter@hogwarts.edu" disabled readonly>
+          </div>
+          <div class="input-row">
+            <label>Phone#</label>
+            <input type="mobilephone" value="+911234567890" disabled readonly>
+          </div>
+          <div class="input-row">
+            <label>Account</label>
+            <input type="customerid" value="76677667" disabled readonly>
+          </div>
+          <div class="input-row">
+            <label>Due</label>
+            <input type="text" value="999.00" disabled readonly>
+          </div>
+          <div class="input-row">
+            <label>Amount</label>
+            <input type="text" value="999.00" name="ezetap_amount" id="ezetap_amount" required>
+          </div>
+          <button class="btn btn-negative btn-block" data-ignore="push" id="paycard"> <span class="icon icon-check"></span> Pay by Card</button>
+          <button class="btn btn-primary btn-block" data-ignore="push" id="showgetbill"> <span class="icon icon-left-nav"></span>Find Bill</button>
+        </form> 
+      </div>
+
+    </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#customerdetails").hide();
+});
+
+$("#getcustomerdetails").click(function() {
+    //validate input fields first
+    var in_mobile = $("#in_mobile").val().trim();
+    var in_custid = $("#in_custid").val().trim();
+    //TODO: use string.js lib functions
+
+    if (in_mobile == "" && in_custid == "") {
+      alert("Please! Enter something...");
+      $("#in_mobile").focus();
+      return false;
+    }
+
+    if (in_mobile!="" && in_mobile.match(/^\d{10}/g) == null) {
+      alert("Dear, mobile# is 10 digits in India...");
+      $("#in_mobile").focus();
+      return false;
+    }
+    if (in_custid!="" && in_custid.match(/^\d{5}/g) == null) {
+      alert("Customer ID should be 5 digits");
+      $("#in_custid").focus();
+      return false;
+    }
+
+    //TODO: if validation is fine, do an ajax call to get the bill
+
+    //TODO: on success of ajax call, fill up fields appropriately and then show the panel
+    $("#customerdetails").show();
+    $("#customerdetails").css("visibility", "visible");
+    $(this).parent().hide();
+    $("#ezetap_amount").focus();
+    return false;
+});
+$("#showgetbill").click(function() {
+    $("#customerdetails").hide();
+    $("#customerdetails").css("visibility", "hidden");
+    $("#getcustomerdetails").parent().show();
+    return false;
+});
+</script>
+
+  </body>
+
+</html>
+<!--
+vim: set ts=2 sw=2 et ai sm  :
+--> 

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+<title>Exide</title>
+
+<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="css/roboto-condensed.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+
+</head>
+
+<body>
+
+<nav class="grey darken-4" role="navigation">
+<div class="container">
+  <div class="nav-wrapper"><a id="logo-container" href="#" class="brand-logo"><img src="images/logo.png" alt="exide"/></a>
+
+<ul id="nav-mobile" class="side-nav" style="padding-top:80px;">
+  <li><a href="#/salecard" class="stuffed"><i class="mdi-action-credit-card"></i> Sale - Card</a></li>
+  <li><a href="#/salecashback" class="stuffed"><i class="mdi-maps-local-atm"></i> Sale - Cash Back</a></li>
+  <li><a href="#/salerp" class="stuffed"><i class="mdi-hardware-phone-android"></i> Sale - Remote</a></li>
+  <li><a href="#/salecash" class="stuffed"><i class="mdi-editor-attach-money"></i> Sale - Cash</a></li>
+</ul>
+<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+</div>
+</div>
+</nav>
+
+<div class="container">
+<div id="collection">
+</div>
+<div class="fixed-action-btn" style="bottom: 24px; right: 24px;">  
+  <a class="btn-floating btn-large waves-effect waves-light red"><i class="mdi-content-add"></i></a>
+  <ul>
+    <li><a href="#/salecashback" class="btn-floating btn-large red"><i class="large mdi-maps-local-atm"></i></a></li>
+    <li><a href="#/salerp" class="btn-floating btn-large yellow darken-1"><i class="large mdi-hardware-phone-android"></i></a></li>
+    <li><a href="#/salecash" class="btn-floating btn-large green"><i class="large mdi-editor-attach-money"></i></a></li>
+    <li><a href="#/salecard" class="btn-floating btn-large blue"><i class="large mdi-action-credit-card"></i></a></li>
+  </ul>
+</div>
+
+
+</div>
+<!-- templates -->
+<script type="text/template" id="collection-template">
+
+<div class="col s12 m5">
+    <h3 class="right-align">
+        &#8377;{{formatRupee netAmount}}
+    </h3>
+</div>
+<div class="divider"></div>
+
+{{#each txns}}
+<div class="section">
+  <div class="col s12 m5">
+    <div class="row"><div class="col s8">
+      <strong>
+        {{#xif paymentMode '==' 'CASH'}}
+        <i class="mdi-editor-attach-money green box circle"></i>
+        {{/xif}}
+        {{#xif paymentMode '==' 'CARD'}}
+          {{#xif amountCashBack '==' 0}}
+          <i class="mdi-action-credit-card blue box circle"></i>
+          {{/xif}}
+          {{#xif amountCashBack '>' 0}}
+          <i class="mdi-maps-local-atm red box circle"></i>
+          {{/xif}}
+        {{/xif}}
+      </strong>
+      <span style="font-size:smaller;">{{nicePostingDate}}</span>
+    </div>
+    <div class="col s4">
+    <h5 class="right-align green-text">
+        &#8377;{{formatRupee amount}}
+    {{#xif amountCashBack '>' 0}}
+    <div class="right-align red-text" style="font-size:smaller;">
+        (&#8377;{{formatRupee amountCashBack}})
+    </div>
+    {{/xif}}
+    </h5>
+    </div></div>
+    <div class="row">
+      <div class="col s6">
+      <a href="{{customerReceiptUrl}}"><i class="mdi-action-receipt"></i> receipt</a>
+      </div>
+      <div class="col s6 right-align">
+      {{#xif customerMobile '>' ''}}
+      <i class="mdi-communication-phone green-text"></i>
+      {{customerMobile}}
+      {{/xif}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+{{/each}}
+</script>
+<script type="text/template" id="salecard-template">
+<div class="row">
+  <form class="col s12" id="salecard-form">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecard_amount" type="number" class="validate">
+        <label for="salecard_amount">Amount</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecard-order_id" type="text" class="validate">
+        <label for="salecard-order_id">Order#</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-large teal waves-effect waves-light col s12" type="submit" name="paycard" id="paycard">
+        Start Card Payment
+        <i class="mdi-content-send right"></i>
+      </button>
+      <button class="btn btn-large red waves-effect waves-light col s12" type="reset" onClick="javascript:history.go(-1);">
+        <i class="mdi-content-remove-circle right"></i>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+</script>
+<script type="text/template" id="salecash-template">
+<div class="row">
+  <form class="col s12" id="salecash-form">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecash-amount" type="number" class="validate">
+        <label for="salecash-amount">Amount</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecash-order_id" type="text" class="validate">
+        <label for="salecash-order_id">Order#</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-large teal waves-effect waves-light col s12" type="submit" name="paycash" id="paycash">
+        Collect Cash
+        <i class="mdi-content-send right"></i>
+      </button>
+      <button class="btn btn-large red waves-effect waves-light col s12" type="reset" onClick="javascript:history.go(-1);">
+        <i class="mdi-content-remove-circle right"></i>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+</script>
+<script type="text/template" id="salecashback-template">
+<div class="row">
+  <form class="col s12" id="salecashback-form">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecashback-amount" type="number" class="validate">
+        <label for="salecashback-amount">Amount</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecashback-order_id" type="text" class="validate">
+        <label for="salecashback-order_id">Order#</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salecashback-amount-cb" type="number" class="validate">
+        <label for="salecashback-amount-cb">Cash Out</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-large teal waves-effect waves-light col s12" type="submit" name="paycashback" id="paycashback">
+        Start Card Payment
+        <i class="mdi-content-send right"></i>
+      </button>
+      <button class="btn btn-large red waves-effect waves-light col s12" type="reset" onClick="javascript:history.go(-1);">
+        <i class="mdi-content-remove-circle right"></i>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+</script>
+
+<script type="text/template" id="salerp-template">
+<div class="row">
+  <form class="col s12" id="salerp-form">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salerp-amount" type="number" class="validate">
+        <label for="salerp-amount">Amount</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salerp-order_id" type="text" class="validate">
+        <label for="salerp-order_id">Order#</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salerp-payee" type="tel" class="validate">
+        <label for="salerp-payee">Mobile# of Payee</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="salerp-agent" type="tel" class="validate">
+        <label for="salerp-agent">Mobile# of Merchant</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-large teal waves-effect waves-light col s12" type="submit" name="payrp" id="payrp">
+        Request Payment (Amex)
+        <i class="mdi-content-send right"></i>
+      </button>
+      <button class="btn btn-large red waves-effect waves-light col s12" type="reset" onClick="javascript:history.go(-1);">
+        <i class="mdi-content-remove-circle right"></i>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+</script>
+
+<script type="text/javascript" language="javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/lib/materialize.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/lib/moment-with-locales.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/lib/underscore-min.js"></script>
+<script type="text/javascript" language="javascript" src="js/lib/backbone-min.js"></script>
+<script type="text/javascript" language="javascript" src="js/lib/handlebars-v2.0.0.js"></script>
+
+<script type="text/javascript" language="javascript" src="js/utils.js"></script>
+<script type="text/javascript" language="javascript" src="js/app.js"></script>
+
+<script type="text/javascript">
+  $('.button-collapse').sideNav({menuWidth: 240, activationWidth: 70});
+</script>
+
+
+</body>
+</html>

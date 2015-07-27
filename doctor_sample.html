@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      Dr. Pullman's Dental Clinic
+    </title>
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap.cosmo.min.css">
+  <link rel="stylesheet" href="eze/lib/bootstrap/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="page-header navbar-fixed-top bg-warning" style="padding-top:0;margin-top:0;text-align:center;">
+         <img  src="http://www.clipartbest.com/cliparts/7Ta/RLb/7TaRLbETA.jpeg" class="img-responsive img-circle img-thumbnail" height="120" width="120">
+         <h3 style="text-align:center;font-family:impact;" >Dr. Pullman's</h3>
+    </div>
+    <div class="container" style="margin-top:200px;">
+      <form role="form" id="data_collection">
+       <div class="form-group">
+        <label for="ezetap_externalRefNumber2">Service</label>
+        <ul class="list-group">
+        <li class="list-group-item"><div class="radio">
+          <label>
+            <input type="radio" name="ezetap_externalRefNumber2" id="externalRefNumber2_1" value="extraction_1000">
+            Tooth Extraction (&#8377;1000)
+          </label>
+        </div></li>
+        <li class="list-group-item"><div class="radio">
+          <label>
+            <input type="radio" name="ezetap_externalRefNumber2" id="externalRefNumber2_2" value="rootcanal_5000">
+            Root Canal (&#8377;5000)
+          </label>
+        </div></li>
+        <li class="list-group-item"><div class="radio">
+          <label>
+            <input type="radio" name="ezetap_externalRefNumber2" id="externalRefNumber2_3" value="whitening_4500">
+            Milky Way Whitening (&#8377;4500)
+          </label>
+        </div></li>
+        </ul>
+       </div>
+       <div class="form-group">
+       <label for="ezetap_externalRefNumber3">Customer Classification</label>
+        <select class="form-control" id="ezetap_externalRefNumber3" name="ezetap_externalRefNumber3">
+          <option value="GOLD_10">Gold (10% off)</option>
+          <option value="PLATINUM_15">Platinum (15% off)</option>
+          <option value="NEW_0" selected>New</option>
+        </select>
+       </div>
+       <div class="form-group">
+       <label for="ezetap_amount">Amount</label> 
+         <div class="input-group">
+            <span class="input-group-addon">&#8377;</span>
+            <input class="form-control" readonly type="number" id="ezetap_amount" name="ezetap_amount" placeholder="Amount"  required value="0">
+            <span class="input-group-addon">.00</span>
+        </div>
+       </div>
+       <div class="form-group" style="text-align:center;">
+       <button  class="btn btn-success" id="payCard" onclick="payByCard();return false;"><span class="glyphicon glyphicon-list"></span> Pay by Card</button>
+       <button  class="btn btn-warning" id="payCash" onclick="payByCash();return false;"><span class="glyphicon glyphicon-align-center"></span> Pay by Cash</button>
+       </div>
+       </form>
+   </div>
+
+<script src="eze/lib/jquery.min.js"></script>
+<script src="eze/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/**
+ * Send a toast to the android application
+ *
+ * msg: String - the text to show
+ * valid: Boolean - set to false, if you want to indicate this message is for an error. eg: validation failure.
+ */
+function sendToast(msg, valid) {
+  try {
+    Ezetap.getMessage(msg, valid);
+  } catch(e) {
+    console.log("Toast Ex: [" + valid + "] " + msg);
+  }
+}
+
+function getWebSetting(setting) {
+  //alert(setting);
+}
+
+function getPaymentJson() {
+  //instead of dumping the form, you can collect values one by one as well.
+  //this is just for example
+  var dump = $('#data_collection').serializeArray(),
+             len = dump.length,
+             json = {};
+  for (i=0; i<len; i++) {
+    key = dump[i].name;
+    if (0==key.indexOf("ezetap_")) // Ezetap looks at only specific keys; all those need to start with ezetap_
+      json[key] = dump[i].value.trim();
+  }
+  //ensure amounts are numeric
+  json.ezetap_amount = parseFloat(json.ezetap_amount);
+  if (json.ezetap_additionalamount) json.ezetap_additionalamount = parseFloat(json.ezetap_additionalamount);
+  else delete json['ezetap_additionalamount'];
+  if (json.ezetap_amount < 1) {
+    //example of sending an error toast
+    sendToast("Amount cannot be less than 1.00", false);
+    $('#ezetap_amount').focus();
+    return;
+  }
+  return json;
+}
+
+
+function payByCard() {
+  //Note that the button name to be passed HAS to be ezetap_btn_card_payment
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCardPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Card Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Card Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCash() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doCashPayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cash Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cash Payment Ex - " + e.message);
+    }
+  }
+}
+
+function payByCheque() {
+  var paymentJson = getPaymentJson();
+  if (paymentJson) {  //if json is empty or false, don't call ezetap
+    try {
+      Ezetap.doChequePayment(JSON.stringify(paymentJson));
+    } catch(e) {
+      console.log("Cheque Payment Ex - " + JSON.stringify(paymentJson));
+      console.log("Cheque Payment Ex - " + e.message);
+    }
+  }
+}
+
+function recalculateAmount() {
+      var choice=$("input[name=ezetap_externalRefNumber2]:radio:checked").val();
+      var expl=choice.split("_");
+      var amount = parseFloat(expl[1]);
+      choice=$("#ezetap_externalRefNumber3").val();
+      var expl=choice.split("_");
+      amount = amount * (1 - parseFloat(expl[1])/100.0);
+      $('#ezetap_amount').val(amount);
+}
+$(document).ready(function() {
+    $("input[name=ezetap_externalRefNumber2]:radio").change(recalculateAmount);
+    $("#ezetap_externalRefNumber3").change(recalculateAmount);
+});
+</script>
+</html>
+<!--
+vim: set ts=2 sw=2 et ai sm :
+--> 
+

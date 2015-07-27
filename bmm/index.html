@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shopping Cart</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+  <link rel="stylesheet" href="css/jquery.mobile.theme-1.4.5.min.css" />
+	<link rel="stylesheet" href="css/index.css" />
+
+	<!--Product Item template-->
+	<script type="text/template" id="prod-item-tmpl">
+		{{if attributes.product_id != ""}}
+			<a href="#purchase" data-rel="popup" data-transition="pop" data-position-to="window" title="Purchase?" id="buyItemBtnLg" data-theme="c">
+				<img src="img/${attributes.img}">
+				<h4>${attributes.title}</h4>
+        {{if attributes.price > 0}}
+            <p>Rs.${attributes.price}</p>
+        {{/if}}
+        {{if attributes.price < 0}}
+            <p>Rs.______________</p>
+        {{/if}}
+			</a>
+			<a href="#purchase" data-rel="popup" data-transition="pop" data-position-to="window" title="Purchase?" id="buyItemBtn" data-theme="c">Buy
+      </a>
+		{{/if}}
+	</script>
+
+	<!--Product Item Popup template-->
+	<script type="text/template" id="prod-item-popup-tmpl">
+		{{if attributes.product_id != ""}}
+			<h3>Add to Your Order?</h3>
+			<img src="img/${attributes.img}" border="1px;">
+			<p>
+				<strong>${attributes.title}</strong> <br/>
+			</p>
+      {{if attributes.price > 0}}
+        <input type="number" id="order_line_price" required=required readonly=readonly value="${attributes.price}"/>
+      {{/if}}
+      {{if attributes.price < 0}}
+        <input type="number" id="order_line_price" required=required  value="0"/>
+      {{/if}}
+			<div data-role="controlgroup" data-type="horizontal" >
+				<a href="index.html" data-role="button" data-mini="true" data-rel="back" data-inline="true" data-theme="b" class="buy-item-btn">..Buy..</a>
+				<a href="index.html" data-role="button" data-mini="true" data-rel="back" data-inline="true">Cancel</a>
+			</div>
+		{{/if}}
+	</script>
+
+	<!--Order Item template-->
+	<script type="text/template" id="order-item-tmpl">
+		{{if attributes.product_id != ""}}
+			<td><img src="img/${attributes.img}" class="basket-item-img"/></td>
+			<th>${attributes.title}</th>
+			<td class="tbl-price">Rs.${attributes.price}</td>
+			<td><a href="#" data-role="button" data-icon="delete" data-iconpos="notext" id="remove-item-btn">Remove</a></td>
+		{{/if}}
+	</script>
+
+	<script type="text/template" id="total-price-tmpl">
+		<tr class="tbl-price-total-row">
+			<td>&nbsp;</td>
+			<th>&nbsp;</th>
+			<td>&nbsp;</td>
+			<td class="tbl-price tbl-price-total">Rs.${totalPrice}</td>
+			<td>&nbsp;</td>
+		</tr>
+	</script>
+
+	<!--Basket Button-->
+	<script type="text/template" id="basket-btn-tmpl">
+		<a href="#basket" class="ui-btn ui-btn-g ui-btn-right" id="basket-btn">Order: Rs.${price}</a>
+	</script>
+
+	<!--Reset Button-->
+	<script type="text/template" id="reset-btn-tmpl">
+		<button data-icon="refresh" id="reset-btn" data-theme="e" class="ui-btn-left">Clear</button>
+	</script>
+	
+	<!--Submit Button-->
+	<script type="text/template" id="submit-btn-tmpl">
+		<button data-icon="grid" data-theme="a" id="submit-btn-cash">Pay By Cash</button>
+		<button data-icon="star" data-theme="c" id="submit-btn-card">Pay By Card</button>
+	</script>
+	
+</head>
+
+<body>
+
+	<!-- Home Page -->
+
+	<div data-role="page" id="home">
+		<div data-role="header" class="ui-bar-b" id="home-header">
+			<h1>BMM Memorabilia</h1>
+		</div>
+		<div data-role="content">
+			<ul data-role="listview" data-split-icon="gear" data-filter="false" id="productList"></ul>
+			<div data-role="popup" id="purchase" data-overlay-theme="a" class="ui-content"></div>
+		</div>
+	</div>
+
+	<!-- Basket Page -->
+
+	<div data-role="page" id="basket">
+		<div data-role="header" class="ui-bar-b">
+			<a href="#home" data-icon="home" data-iconpos="notext">Home</a>
+			<h1>Your Order</h1>
+		</div>
+		<div data-role="content">
+			<table data-role="table" id="cart-table" class="my-custom-breakpoint">
+				<thead>
+					<tr>
+						<th class="th-img" data-priority="4"><abbr title="icon">&nbsp;</abbr></th>
+						<th class="th-title"><abbr title="Title">Title</abbr></th>
+						<th class="th-price tbl-price"><abbr title="Item Price">Price</abbr></th>
+						<th class="th-remove" data-priority="5"><abbr title="delete">&nbsp;</abbr></th>
+					</tr>
+				</thead>
+				<tbody id="order-items"></tbody>
+			</table>
+		</div>
+		<div data-role="footer" class="ui-bar ui-bar-e basket-footer">
+		</div>
+
+	</div>
+
+  <script type="text/javascript" src="js/lib/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="js/lib/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.tmpl.js" ></script>
+	<script type="text/javascript" src="js/lib/underscore.js"></script>
+	<script type="text/javascript" src="js/lib/backbone.js"></script>
+	<script type="text/javascript" src="js/shopping-cart.js"></script>
+</body>
+
+</html>

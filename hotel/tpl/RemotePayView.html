@@ -1,0 +1,31 @@
+
+
+      <form class="form" role="form" id="schedule-event">
+
+      <div class="form-group">
+        <label for="mobile" class="col-sm-4 control-label">Relative's Mobile#</label>
+      	<input class="form-control" name="mobile" id="mobile" type="tel" placeholder="10 digit mobile number" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mobile" class="col-sm-4 control-label">Staff's Mobile#</label>
+        <input class="form-control" name="agent" id="agent" type="tel" placeholder="10 digit mobile number" />
+        </div>
+      </div>
+
+      <input type="hidden" name = "amount" value="<%- amount %>"/>
+      <input type="hidden" name = "extRef" value="<%- ref %>"/>
+
+      <button type="button" id="sendtorelative" class="btn btn-info btn-lg btn-block"><i class="fa fa-send fa-lg  pull-left"></i> Send </button>
+
+
+      </form>
+
+    <div class="clearfix"></div>
+    <div class="row">
+    <div id="response-area" class="alert alert-success alert-dismissable" style="margin-top:10px; display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <span id="response-message"></span>
+    </div>
+    </div>

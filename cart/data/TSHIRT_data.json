@@ -1,0 +1,22 @@
+[
+	{
+		"product_id": 1,
+		"category": "TSHIRT",
+		"title": "Tee One",
+		"img": "ts1.jpg",
+		"price": 15.00
+	},
+	{
+		"product_id": 2,
+		"category": "TSHIRT",
+		"title": "Tee Two",
+		"img": "ts2.jpg",
+		"price": 13.00
+	},	{
+		"product_id": 3,
+		"category": "TSHIRT",
+		"title": "Tee Three",
+		"img": "ts3.jpg",
+		"price": 13.00
+	}
+]
